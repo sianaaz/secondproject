@@ -1,0 +1,48 @@
+/* Artist - Home page */
+.artist-home{
+    position: relative;
+    z-index: 0; 
+    padding: 10px;
+  }
+  .logo-container {
+    position: relative;
+  }
+  .artist-home-logo{
+    padding-top: 35px;
+    position: absolute;
+    top: -50px; 
+    left: 20%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  .navbar-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: -20px;
+  }
+  .nav-link{
+    color: #A16A5E;
+  }
+  .nav-item {
+    text-align: center;
+  }
+  .section-sold-income{
+    background-color: #edd5bb;
+    padding: 25px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+  }
+  .total-items-sold, .total-income{
+    background-color: #A16A5E;
+    color: #fcebd5;
+    padding: 15px;
+    margin: 10px;
+  }
+  .auctioning-item{
+    background-color: #d44c2e;
+    color: #fcebd5;
+    width: 50%;
+    padding: 15px;
+  }
+  /* Artist - Home page */
