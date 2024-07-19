@@ -1394,3 +1394,97 @@ document.getElementById("artistName").innerText = loggedArtist;
 
 const artistItems = new ArtistItems(loggedArtist);
 artistItems.renderItems();
+
+
+const gallery = document.getElementById("gallery");
+const filterIcon = document.getElementById('filter-icon');
+const filtersPanel = document.getElementById('filters-panel');
+const closeFilters = document.getElementById('close-filters');
+const itemNameFilter = document.getElementById('item-name-filter');
+const artistFilter = document.getElementById('artist-filter');
+const priceMinFilter = document.getElementById('price-min-filter');
+const priceMaxFilter = document.getElementById('price-max-filter');
+const typeFilter = document.getElementById('type-filter');
+const applyFilters = document.getElementById('apply-filters');
+
+const publishedItems = items.filter((item) => item.isPublished === true && item.dateSold === null);
+
+function populateArtistFilter(){
+  fetch('https://jsonplaceholder.typicode.com/users')
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(user => {
+      const option = document.createElement('option');
+      option.value = user.name;
+      option.textContent = user.name;
+      artistFilter.appendChild(option);
+    });
+  });
+}
+
+function populateTypeFilter(){
+  itemTypes.forEach(type => {
+    const option = document.createElement('option');  
+    option.value = type;
+    option.textContent = type;
+    typeFilter.appendChild(option);
+  });
+};
+
+function displayItems(items){
+  gallery.innerHTML = '';
+  items.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.setAttribute("class", "card");
+    card.classList.add(index % 2 === 0 ? "card-even" : "card-odd");
+  
+    const textClass = index % 2 === 0 ? "text-even" : "text-odd";
+    const priceClass = index % 2 === 0 ? "price-even" : "price-odd";
+  
+    card.innerHTML = `
+        <div class="artist-card">
+          <img src="${item.image}">
+          <div class="artist-card-body">
+            <div class="artist-card-content">
+              <h1 class="artist-title ${textClass}">${item.artist}</h1>
+              <p class="price ${priceClass}">$${item.price}</p>
+            </div>
+            <h3 class="artist-card-title ${textClass}">${item.title}</h3>
+            <p class="artist-card-text ${textClass}">${item.description}</p>
+          </div>
+        </div>
+      `;
+    gallery.appendChild(card);
+  });
+};
+
+function applyFiltersFunc(){
+  const filteredItems = publishedItems.filter(item => {
+    const itemName = itemNameFilter.value.toLowerCase();
+    const artistName = artistFilter.value;
+    const minPrice = parseFloat(priceMinFilter.value);
+    const maxPrice = parseFloat(priceMaxFilter.value);
+    const itemType = typeFilter.value;
+
+    const matchesName = itemName ? item.title.toLowerCase().includes(itemName) : true;
+    const matchesArtist = artistName ? item.artist === artistName : true;
+    const matchesMinPrice = !isNaN(minPrice) ? item.price >= minPrice : true;
+    const matchesMaxPrice = !isNaN(maxPrice) ? item.price <= maxPrice : true;
+    const matchesType = itemType ? item.type === itemType : true;
+
+    return matchesName && matchesArtist && matchesMinPrice && matchesMaxPrice && matchesType;
+  });
+
+  displayItems(filteredItems);
+  filtersPanel.classList.remove('active');
+};
+
+applyFilters.addEventListener('click', applyFiltersFunc);
+
+populateArtistFilter();
+populateTypeFilter();
+displayItems(publishedItems);
+
+filterIcon.addEventListener('click', () => {
+  filtersPanel.classList.add('active');
+});
