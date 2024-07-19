@@ -1018,3 +1018,379 @@ if (selectedArtist) {
   itemsSold.textContent = `${soldItems}`;
   incomeTotal.textContent = `$${totalIncome}`;
 }
+
+const itemTypes = ["painting", "sculpture", "digital", "custom"];
+
+const modal = document.getElementById("myModal");
+const addNewItemButton = document.getElementById("addNewItemButton");
+const closeButton = document.getElementsByClassName("close");
+const cancelButton = document.getElementById("cancelButton");
+const newItemForm = document.getElementById("newItemForm");
+const itemsContainer = document.getElementById("itemsContainer");
+
+let currentUser = "Artist Name";
+const today = new Date().toLocaleDateString();
+
+let editingItemId = null;
+
+const typeSelect = document.getElementById("type");
+itemTypes.forEach((type) => {
+  const option = document.createElement("option");
+  option.value = type;
+  option.textContent = type;
+  typeSelect.appendChild(option);
+});
+
+addNewItemButton.onclick = function () {
+  modal.style.display = "block";
+};
+
+closeButton.onclick = closeModalAndResetForm;
+cancelButton.onclick = closeModalAndResetForm;
+
+window.onclick = function (event) {
+  if (event.target == modal) {
+    closeModalAndResetForm();
+  }
+};
+
+newItemForm.onsubmit = function (event) {
+  event.preventDefault();
+
+  const image = document.getElementById("image").value;
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const type = document.getElementById("type").value;
+  const isPublished = document.getElementById("isPublished").checked;
+  const price = document.getElementById("price").value;
+
+  const newItem = {
+    id: editingItemId ? editingItemId : Date.now(),
+    image,
+    title,
+    description,
+    type,
+    isPublished,
+    price,
+    artist: currentUser,
+    dateCreated: today,
+  };
+
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+
+  if (editingItemId) {
+    const index = items.findIndex((item) => item.id === editingItemId);
+    if (index !== -1) {
+      items[index] = newItem;
+    }
+    editingItemId = null;
+  } else {
+    items.push(newItem);
+  }
+
+  localStorage.setItem("items", JSON.stringify(items));
+
+  renderItems(currentUser);
+  closeModalAndResetForm();
+};
+
+function closeModalAndResetForm() {
+  modal.style.display = "none";
+  newItemForm.reset();
+  editingItemId = null;
+}
+
+function renderItems(user) {
+  itemsContainer.innerHTML = "";
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  items
+    .filter((item) => item.artist === user)
+    .forEach((item) => {
+      const col = document.createElement("div");
+      col.classList.add("col", "mb-2");
+
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.style.backgroundColor = "#FCEBD5";
+      card.style.width = "100%";
+      card.style.marginTop = "15px";
+
+      const image = document.createElement("img");
+      img.src = item.image;
+      img.classList.add("card-img-top");
+      img.alt = item.title;
+
+      const cardBody = document.createElement("div");
+      cardBody.classList.add("card-body");
+
+      const cardTitle = document.createElement("h5");
+      cardTitle.classList.add("card-title");
+      cardTitle.textContent = item.title;
+
+      const cardText = document.createElement("p");
+      cardText.classList.add("card-text");
+      cardText.textContent = item.description;
+
+      const cardType = document.createElement("p");
+      cardType.classList.add("card-text");
+      cardType.textContent = `Type: ${item.type}`;
+
+      const cardPrice = document.createElement("p");
+      cardPrice.classList.add("card-text");
+      cardPrice.textContent = `Price: $${item.price}`;
+
+      const cardArtist = document.createElement("p");
+      cardArtist.classList.add("card-text");
+      cardArtist.textContent = `Artist: ${item.artist}`;
+
+      const cardDate = document.createElement("p");
+      cardDate.classList.add("card-text");
+      cardDate.textContent = `Date Created: ${item.dateCreated}`;
+
+      const publishButton = document.createElement("button");
+      publishButton.classList.add(
+        "publish-Btn",
+        item.isPublished ? "btn-warning" : "btn-success"
+      );
+      publishButton.textContent = item.isPublished ? "Unpublish" : "Publish";
+      publishButton.onclick = () => togglePublish(item.id);
+
+      const editButton = document.createElement("button");
+      editButton.classList.add("edit-Btn");
+      editButton.textContent = "Edit";
+      editButton.onclick = () => editItem(item.id);
+
+      const removeButton = document.createElement("button");
+      removeButton.classList.add("remove-Btn", "btn-danger");
+      removeButton.textContent = "Remove";
+      removeButton.onclick = () => removeItem(item.id);
+
+      cardBody.appendChild(cardTitle);
+      cardBody.appendChild(cardText);
+      cardBody.appendChild(cardType);
+      cardBody.appendChild(cardPrice);
+      cardBody.appendChild(cardArtist);
+      cardBody.appendChild(cardDate);
+      cardBody.appendChild(publishButton);
+      cardBody.appendChild(editButton);
+      cardBody.appendChild(removeButton);
+
+      card.appendChild(image);
+      card.appendChild(cardBody);
+      col.appendChild(card);
+
+      itemsContainer.appendChild(col);
+    });
+}
+
+function togglePublish(itemId) {
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  const index = items.findIndex((item) => item.id === itemId);
+  if (index !== -1) {
+    items[index].isPublished = !items[index].isPublished;
+    localStorage.setItem("items", JSON.stringify(items));
+    renderItems(currentUser);
+
+    if (items[index].isPublished) {
+      addToVisitorsListing(items[index]);
+    }
+  }
+}
+
+function addToVisitorsListing(item) {
+  let visitorsItems = JSON.parse(localStorage.getItem("visitorsItems")) || [];
+  visitorsItems.push(item);
+  localStorage.setItem("visitorsItems", JSON.stringify(visitorsItems));
+}
+
+function editItem(itemId) {
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  const index = items.findIndex((item) => item.id === itemId);
+  if (index !== -1) {
+    const selectedItem = items[index];
+    image.value = selectedItem.image;
+    title.value = selectedItem.title;
+    description.value = selectedItem.description;
+    type.value = selectedItem.type;
+    isPublished.checked = selectedItem.isPublished;
+    price.value = selectedItem.price;
+    editingItemId = itemId;
+    modal.style.display = "block";
+  }
+}
+
+function removeItem(itemId) {
+  let items = JSON.parse(localStorage.getItem("items")) || [];
+  const index = items.findIndex((item) => item.id === itemId);
+  if (index !== -1) {
+    items.splice(index, 1);
+    localStorage.setItem("items", JSON.stringify(items));
+    renderItems(currentUser);
+  }
+}
+
+renderItems(currentUser);
+
+//Displaying the items based on the artist logged
+class ArtistItems {
+  constructor(artistName) {
+    this.artistName = artistName;
+    this.items = this.loadItems().filter((item) => item.artist === artistName);
+  }
+
+  loadItems() {
+    const items = localStorage.getItem("items");
+    return items ? JSON.parse(items) : [];
+  }
+
+  saveItems() {
+    localStorage.setItem("items", JSON.stringify(this.items));
+  }
+
+  renderItems() {
+    const container = document.getElementById("itemsContainer");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    this.items.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.backgroundColor = "#FCEBD5";
+
+      card.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <h4>${item.title}</h4>
+                <p>${new Date(item.dateCreated).toLocaleDateString()}</p>
+                <p>${item.description}</p>
+                <p>Type: ${item.type}</p>
+                <p>Price: $${item.price}</p>
+                <div class="card-buttons">
+                    <button onclick="artistItems.togglePublish(${
+                      item.id
+                    })" class="publish-Btn">${
+        item.isPublished ? "Unpublish" : "Publish"
+      }</button>
+                    <button onclick="artistItems.removeItem(${
+                      item.id
+                    })" class="remove-Btn">Remove</button>
+                    <button onclick="artistItems.editItem(${
+                      item.id
+                    })" class="edit-Btn">Edit</button>
+                </div>
+            `;
+      container.appendChild(card);
+    });
+  }
+
+  togglePublish(id) {
+    const item = this.items.find((item) => item.id === id);
+    if (item) {
+      item.isPublished = !item.isPublished;
+      this.saveItems();
+      this.renderItems();
+    }
+  }
+
+  removeItem(id) {
+    if (confirm("Are you sure you want to remove this item?")) {
+      const index = this.items.findIndex((item) => item.id === id);
+      if (index > -1) {
+        this.items.splice(index, 1);
+        this.saveItems();
+        this.renderItems();
+      }
+    }
+  }
+
+  editItem(id) {
+    const item = this.items.find((item) => item.id === id);
+    if (item) {
+      image.value = item.image;
+      title.value = item.title;
+      description.value = item.description;
+      type.value = item.type;
+      isPublished.checked = item.isPublished;
+      price.value = item.price;
+
+      newItemForm.dataset.itemId = id;
+
+      showModal();
+    }
+  }
+}
+
+function showModal() {
+  const modal = document.getElementById("myModal");
+  modal.style.display = "block";
+
+  const span = document.getElementsByClassName("close");
+  const cancelButton = document.getElementById("cancelButton");
+
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+  cancelButton.onclick = function () {
+    modal.style.display = "none";
+  };
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+}
+newItemForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const id = this.dataset.itemId;
+  const image = document.getElementById("image").value;
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
+  const type = document.getElementById("type").value;
+  const isPublished = document.getElementById("isPublished").checked;
+  const price = document.getElementById("price").value;
+
+  if (id) {
+    const item = artistItems.items.find((item) => item.id == id);
+    if (item) {
+      item.image = image;
+      item.title = title;
+      item.description = description;
+      item.type = type;
+      item.isPublished = isPublished;
+      item.price = price;
+    }
+  } else {
+    const newItem = {
+      id: Date.now(),
+      artist: artistItems.artistName,
+      image: image,
+      title: title,
+      description: description,
+      type: type,
+      isPublished: isPublished,
+      price: price,
+      dateCreated: new Date().toISOString(),
+    };
+    artistItems.items.push(newItem);
+  }
+
+  artistItems.saveItems();
+  artistItems.renderItems();
+  modal.style.display = "none";
+});
+
+function populateTypeOptions() {
+  const typeSelect = document.getElementById("type");
+  typeSelect.innerHTML = itemTypes
+    .map((type) => `<option value="${type}">${type}</option>`)
+    .join("");
+}
+
+populateTypeOptions();
+
+const loggedArtist = localStorage.getItem("selectedArtist") || "ArtistName";
+document.getElementById("artistName").innerText = loggedArtist;
+
+const artistItems = new ArtistItems(loggedArtist);
+artistItems.renderItems();
