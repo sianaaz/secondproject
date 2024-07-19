@@ -46,3 +46,26 @@
     padding: 15px;
   }
   /* Artist - Home page */
+  
+  /* Chart */
+.sevendays{
+    background-color: #A16A5E;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin-right: 10px;
+  }
+  .fourteendays{
+    background-color: #A16A5E;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin-right: 10px;
+  }
+  .thirtydays{
+    background-color: #A16A5E;
+    border: none;
+    color: white;
+    padding: 10px;
+  }
+  /* Chart */
