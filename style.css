@@ -1,0 +1,161 @@
+/* Visitors - Listing page */
+.visitors-listings {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+  }
+  .logo-container {
+    position: relative;
+  }
+  .visitors-listings-logo {
+    padding-top: 35px;
+    position: absolute;
+    top: -85px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  .artist-card-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  .artist-card-content .price {
+    padding: 5px;
+    font-family: "Roboto";
+  }
+  .artist-card-body {
+    padding: 5px 20px 5px 20px;
+  }
+  .artist-card img {
+    width: 100%;
+    height: auto;
+  }
+  .artist-card {
+    margin: 45px 0px 20px 0px;
+  }
+  .artist-title {
+    font-family: "Reenie Beanie";
+    font-size: 40px;
+  }
+  .artist-card-title,
+  .artist-card-textt {
+    font-family: "Roboto";
+  }
+  .card-even {
+    background-color: #edd5bb;
+  }
+  
+  .card-odd {
+    background-color: #a16a5e;
+  }
+  .price-even {
+    background-color: #a16a5e;
+    color: #fcebd5;
+  }
+  
+  .price-odd {
+    background-color: #edd5bb;
+    color: #a16a5e;
+  }
+  .text-even {
+    color: #a16a5e;
+  }
+  .text-odd {
+    color: #edd5bb;
+  }
+  
+  .filter-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #d44c2e;
+    color: #fcebd5;
+    border: none;
+    cursor: pointer;
+    font-size: 30px;
+  }
+  .fa-sliders {
+    color: #fcebd5;
+  }
+  
+  /* Filters Panel */
+  .filters-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 40%;
+    height: 100%;
+    padding: 10px;
+    background-color: #a16a5e;
+    color: #fff;
+    transition: right 0.3s ease;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+  }
+  .filters-panel input {
+    border: 1px solid #fcebd5;
+    background-color: #a16a5e;
+    display: flex;
+    margin-top: 10px;
+  }
+  .hr {
+    border: 1px solid white;
+    width: 100%;
+    height: 100px;
+  }
+  
+  .filters-panel.active {
+    right: 0;
+  }
+  .filters-content {
+    /* width: 80%; */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 60px;
+  }
+  .flex-content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  .visitors-listings-filter {
+    background-color: #fcebd5;
+    margin: -10px;
+    padding: 10px;
+  }
+  .apply-filters-wrapper{
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+    width: 100%;
+  }
+  .fa-check {
+    background-color: #d44c2e;
+    padding: 15px;
+    font-size: 30px;
+    color: #fcebd5;
+  }
+  .apply-filters {
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    border: none;
+  }
+  .form-select {
+    background-color: #a16a5e;
+    color: #edd5bb;
+    border: 1px solid #edd5bb;
+    width: 110px;
+    height: 40px;
+  }
+  .form-select:hover {
+    cursor: pointer;
+  }
+  /* Visitors - Listing page */
