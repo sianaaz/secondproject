@@ -42,6 +42,82 @@
      </div>
    </section>
 
+   <!--Header-->
+   <header class="artist-home">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img class="artist-home-logo" src="images/Logo.png" alt="Logo" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="artist_items.html">Items</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="text-center">
+      <h1 id="nameOfArtist" class="h1-header">Street ARTists</h1>
+    </div>
+  </header>
+  <!-- Header -->
+
+  <!-- Total Items Sold - Total Income -->
+  <section class="section-sold-income">
+    <div class="row text-center justify-content-center mx-auto">
+      <div class="total-items-sold col-sm-6 col-md-5">
+        <p>Total Items Sold</p>
+        <h3 id="items-sold"></h3>
+      </div>
+      <div class="total-income col-sm-6 col-md-5">
+        <p>Total Income</p>
+        <h3 id="total-income"></h3>
+      </div>
+    </div>
+    <div
+      class="row auctioning-item text-center justify-content-center mx-auto">
+      <div class="col">
+        <p>Live Auctioning Item</p>
+        <h3>$1200</h3>
+        <p>current bid</p>
+      </div>
+    </div>
+  </section>
+  <!-- Total Items Sold - Total Income -->
+
+  <div id="artist-items"></div>
+
+  <!--Chart-->
+  <section class="chart-section py-5">
+    <div>
+      <button class="sevendays" id="7-days">7 days</button>
+      <button class="fourteendays" id="14-days">14 days</button>
+      <button class="thirtydays" id="30-days">30 days</button>
+      <canvas id="myChart"></canvas>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="artist_home.js"></script>
+  <script src="chart.js"></script>
+
    <script src="index.js"></script>
 </body>
 </html>
